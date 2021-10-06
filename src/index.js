@@ -2,6 +2,7 @@ const path = require('path')
 const { Storage, Utils } = require('copha')
 
 class File extends Storage {
+    static CONFIG = require('./config.json')
     constructor(taskConf) {
         super(taskConf)
     }
