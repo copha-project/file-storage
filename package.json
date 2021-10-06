@@ -1,0 +1,7 @@
+{
+  "name": "file-storage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "aong <i@aong.cn>",
+  "license": "MIT"
+}
