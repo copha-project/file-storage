@@ -1,5 +1,5 @@
 const path = require('path')
-const { Storage, Utils } = require('copha')
+const { Storage, Utils, Task } = require('copha')
 
 class File extends Storage {
     static CONFIG = require('./config.json')
@@ -9,12 +9,13 @@ class File extends Storage {
 
     #getDetailPath(id){
         const filename = `${id}.json`
-        return path.join(this.taskConf.main.dataPath,'detail', filename)
+        const detailPath = this.taskConf.main.dataPath ? path.join(this.taskConf.main.dataPath,'detail') : Task.getPath(this.taskConf.main.name,'detail_dir')
+        return path.join(detailPath, filename)
     }
 
     #getPath(name){
         const pathList = {
-            saveDetailDataDir: path.join(this.taskConf.main.dataPath,'detail')
+            saveDetailDataDir: this.taskConf.main.dataPath ? path.join(this.taskConf.main.dataPath,'detail') : Task.getPath(this.taskConf.main.name,'detail_dir')
         }
         return pathList[name]
     }
@@ -31,7 +32,7 @@ class File extends Storage {
             .filter(f => f.endsWith('.json'))
             .map(f => path.join(this.#getPath('saveDetailDataDir'), f))
     }
-    
+
     async save({data,id}){
         await Utils.saveJson(data, this.#getDetailPath(id))
     }
