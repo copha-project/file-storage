@@ -1,21 +1,22 @@
 const path = require('path')
-const { Storage, Utils, Task } = require('copha')
+const { Storage, Project } = require('copha')
+const Utils = require('uni-utils')
 
 class File extends Storage {
     static CONFIG = require('./config.json')
-    constructor(taskConf) {
-        super(taskConf)
+    constructor() {
+        super()
     }
 
     #getDetailPath(id){
         const filename = `${id}.json`
-        const detailPath = this.taskConf.main.dataPath ? path.join(this.taskConf.main.dataPath,'detail') : Task.getPath(this.taskConf.main.name,'detail_dir')
+        const detailPath = this.projectConfig.main.dataPath ? path.join(this.projectConfig.main.dataPath,'detail') : Project.getPath(this.projectConfig.main.name,'detail_dir')
         return path.join(detailPath, filename)
     }
 
     #getPath(name){
         const pathList = {
-            saveDetailDataDir: this.taskConf.main.dataPath ? path.join(this.taskConf.main.dataPath,'detail') : Task.getPath(this.taskConf.main.name,'detail_dir')
+            saveDetailDataDir: this.projectConfig.main.dataPath ? path.join(this.projectConfig.main.dataPath,'detail') : Project.getPath(this.projectConfig.main.name,'detail_dir')
         }
         return pathList[name]
     }
