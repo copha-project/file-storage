@@ -1,6 +1,5 @@
 const path = require('path')
-const { Storage, Project } = require('copha')
-const Utils = require('uni-utils')
+const { Storage, Project, Utils } = require('copha')
 
 class File extends Storage {
     static CONFIG = require('./config.json')
