@@ -1,40 +1,27 @@
 const path = require('path')
-const { Storage, Project, Utils } = require('copha')
 
-class File extends Storage {
-    static CONFIG = require('./config.json')
-    constructor() {
-        super()
+class File {
+    static CONFIG = require('./config')
+
+    async init(){
+        this.utils = this.helper.utils
     }
-
-    #getDetailPath(id){
-        const filename = `${id}.json`
-        const detailPath = this.projectConfig.main.dataPath ? path.join(this.projectConfig.main.dataPath,'detail') : Project.getPath(this.projectConfig.main.name,'detail_dir')
-        return path.join(detailPath, filename)
-    }
-
-    #getPath(name){
-        const pathList = {
-            saveDetailDataDir: this.projectConfig.main.dataPath ? path.join(this.projectConfig.main.dataPath,'detail') : Project.getPath(this.projectConfig.main.name,'detail_dir')
-        }
-        return pathList[name]
-    }
-
-    async init(){}
 
     async findById(id){
-        const isExist = await Utils.checkFile(this.#getDetailPath(id))
-        return isExist ? Utils.readJson(this.#getDetailPath(id)) : null
+        const filePath = path.join(this.getPath('detail_dir'),`${id}.json`)
+        const isExist = await this.utils.checkFile(filePath)
+        return isExist ? this.utils.readJson(filePath) : null
     }
 
     async all(){
-        return (await Utils.readDir(this.#getPath('saveDetailDataDir')))
+        return (await this.utils.readDir(this.getPath('detail_dir')))
             .filter(f => f.endsWith('.json'))
-            .map(f => path.join(this.#getPath('saveDetailDataDir'), f))
+            .map(f => path.join(this.getPath('detail_dir'), f))
     }
 
     async save({data,id}){
-        await Utils.saveJson(data, this.#getDetailPath(id))
+        const filePath = path.join(this.getPath('detail_dir'),`${id}.json`)
+        await this.utils.saveJson(data, filePath)
     }
 
     async close(){}
